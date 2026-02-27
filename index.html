@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohammed Adnan — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red: #e50914;
+  --red2: #b81d24;
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --surface2: #1f1f1f;
+  --surface3: #2a2a2a;
+  --text: #e5e5e5;
+  --text2: #aaa;
+  --text3: #666;
+  --gold: #f5c518;
+  --cyan: #00d4ff;
+  --green: #46d369;
+  --bebas: 'Bebas Neue', sans-serif;
+  --barlow: 'Barlow', sans-serif;
+  --condensed: 'Barlow Condensed', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--barlow);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  position: fixed; width: 20px; height: 20px;
+  border: 2px solid var(--red); border-radius: 50%;
+  pointer-events: none; z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, width 0.2s, height 0.2s, border-color 0.2s;
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  position: fixed; width: 5px; height: 5px;
+  background: var(--red); border-radius: 50%;
+  pointer-events: none; z-index: 99999;
+  transform: translate(-50%, -50%);
+}
+.cursor.hovered { width: 40px; height: 40px; border-color: var(--gold); }
+
+/* ── NAVBAR ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+  transition: background 0.3s;
+}
+nav.scrolled { background: rgba(10,10,10,0.97); }
+.nav-logo {
+  font-family: var(--bebas); font-size: 2rem; letter-spacing: 0.1em;
+  color: var(--red); text-shadow: 0 0 30px rgba(229,9,20,0.5);
+}
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-family: var(--condensed); font-size: 0.85rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text2); text-decoration: none;
+  transition: color 0.2s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+  background: var(--red); transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  font-family: var(--condensed); font-size: 0.82rem; letter-spacing: 0.1em;
+  text-transform: uppercase; background: var(--red); color: #fff;
+  border: none; padding: 0.55rem 1.4rem; cursor: none;
+  transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--red2); }
+
+/* ── HERO ── */
+.hero {
+  position: relative; height: 100vh; display: flex;
+  align-items: flex-end; padding: 0 4rem 8rem;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 50%, rgba(229,9,20,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 70% 30%, rgba(0,212,255,0.04) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(10,10,10,0.6) 60%, var(--bg) 100%);
+  z-index: 1;
+}
+
+/* Animated grid lines */
+.hero-grid {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(229,9,20,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(229,9,20,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove { 0%{background-position:0 0} 100%{background-position:60px 60px} }
+
+.hero-content { position: relative; z-index: 2; max-width: 700px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--condensed); font-size: 0.78rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--green);
+  border: 1px solid rgba(70,211,105,0.3); padding: 0.3rem 0.8rem;
+  margin-bottom: 1.5rem; animation: fadeUp 0.6s ease both;
+}
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: blink 1.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.hero-name {
+  font-family: var(--bebas); font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 0.9; letter-spacing: 0.02em;
+  animation: fadeUp 0.7s 0.1s ease both;
+}
+.hero-name span { color: var(--red); display: block; }
+.hero-role {
+  font-family: var(--condensed); font-size: clamp(1rem, 2.5vw, 1.5rem);
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--text2);
+  margin: 1rem 0 2rem; font-weight: 300;
+  animation: fadeUp 0.7s 0.2s ease both;
+}
+.hero-stats {
+  display: flex; gap: 2.5rem; margin-bottom: 2.5rem;
+  animation: fadeUp 0.7s 0.3s ease both;
+}
+.stat { text-align: center; }
+.stat-num { font-family: var(--bebas); font-size: 2.8rem; color: var(--red); line-height: 1; }
+.stat-label { font-family: var(--condensed); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text3); }
+.hero-btns { display: flex; gap: 1rem; animation: fadeUp 0.7s 0.4s ease both; }
+.btn-primary {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #fff; color: #000; padding: 0.8rem 2rem;
+  font-family: var(--condensed); font-size: 0.95rem; letter-spacing: 0.08em;
+  font-weight: 600; border: none; cursor: none; transition: all 0.2s; text-decoration: none;
+}
+.btn-primary:hover { background: rgba(255,255,255,0.8); }
+.btn-secondary {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: rgba(109,109,110,0.7); color: #fff; padding: 0.8rem 2rem;
+  font-family: var(--condensed); font-size: 0.95rem; letter-spacing: 0.08em;
+  font-weight: 600; border: none; cursor: none; transition: all 0.2s; text-decoration: none;
+}
+.btn-secondary:hover { background: rgba(109,109,110,0.5); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── SECTION GENERIC ── */
+section { padding: 4rem 4rem; }
+.section-header {
+  display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem;
+}
+.section-title {
+  font-family: var(--bebas); font-size: 1.6rem; letter-spacing: 0.05em; color: var(--text);
+}
+.section-tag {
+  font-family: var(--condensed); font-size: 0.75rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--red); border: 1px solid rgba(229,9,20,0.4);
+  padding: 0.15rem 0.5rem;
+}
+.see-all {
+  margin-left: auto; font-family: var(--condensed); font-size: 0.75rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan);
+  text-decoration: none; opacity: 0; transition: opacity 0.3s;
+}
+.section-header:hover .see-all { opacity: 1; }
+
+/* ── EXPERIENCE ROW (Netflix horizontal scroll) ── */
+.row-scroll {
+  display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem;
+  scrollbar-width: none;
+}
+.row-scroll::-webkit-scrollbar { display: none; }
+
+/* Experience Cards */
+.exp-card {
+  flex: 0 0 320px; background: var(--surface); border: 1px solid rgba(255,255,255,0.06);
+  position: relative; overflow: hidden; cursor: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.exp-card:hover {
+  transform: scale(1.04) translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 2px rgba(229,9,20,0.4);
+  z-index: 10;
+}
+.exp-card-top {
+  height: 140px; position: relative;
+  display: flex; align-items: flex-end; padding: 1rem;
+}
+.exp-card-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.4s;
+}
+.exp-card:hover .exp-card-bg { transform: scale(1.05); }
+.exp-logo {
+  font-family: var(--bebas); font-size: 2.5rem; letter-spacing: 0.05em;
+  position: relative; z-index: 1; line-height: 1;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+}
+.exp-company-tag {
+  position: absolute; top: 0.8rem; right: 0.8rem;
+  font-family: var(--condensed); font-size: 0.62rem; letter-spacing: 0.15em;
+  text-transform: uppercase; background: rgba(0,0,0,0.7); color: var(--text2);
+  padding: 0.2rem 0.5rem; border: 1px solid rgba(255,255,255,0.1);
+}
+.exp-card-body { padding: 1rem 1.2rem 1.2rem; }
+.exp-title { font-family: var(--condensed); font-size: 1rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+.exp-duration {
+  font-family: var(--condensed); font-size: 0.72rem; letter-spacing: 0.1em;
+  color: var(--green); text-transform: uppercase; margin-bottom: 0.8rem;
+}
+.exp-desc { font-size: 0.8rem; color: var(--text2); line-height: 1.6; }
+.exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+.exp-tag {
+  font-family: var(--condensed); font-size: 0.65rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text3);
+  border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.45rem;
+}
+
+/* ── SPOTLIGHT HERO CARD (Featured) ── */
+.featured-section { padding: 0 4rem 4rem; }
+.featured-card {
+  position: relative; overflow: hidden;
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  display: grid; grid-template-columns: 1fr 400px;
+  min-height: 360px; cursor: none;
+}
+.featured-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 80% at 0% 50%, rgba(229,9,20,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.featured-left { padding: 3rem; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 1; }
+.featured-label {
+  font-family: var(--condensed); font-size: 0.72rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--red); margin-bottom: 1rem;
+}
+.featured-title { font-family: var(--bebas); font-size: 3.5rem; line-height: 0.95; margin-bottom: 1rem; }
+.featured-desc { font-size: 0.88rem; color: var(--text2); line-height: 1.7; max-width: 480px; }
+.featured-meta { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.meta-chip {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-family: var(--condensed); font-size: 0.72rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text2);
+}
+.meta-chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.featured-right {
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: center; padding: 2rem;
+  background: rgba(255,255,255,0.02);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  gap: 1.2rem;
+}
+.skill-meter { width: 100%; }
+.skill-label { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+.skill-name { font-family: var(--condensed); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text2); }
+.skill-pct { font-family: var(--condensed); font-size: 0.75rem; color: var(--text3); }
+.skill-bar { height: 3px; background: rgba(255,255,255,0.08); position: relative; overflow: hidden; }
+.skill-fill {
+  height: 100%; width: 0; position: absolute; top: 0; left: 0;
+  transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.skill-fill.animated { }
+
+/* ── SKILLS GRID ── */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem; }
+.skill-card {
+  background: var(--surface); border: 1px solid rgba(255,255,255,0.06);
+  padding: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem;
+  cursor: none; transition: all 0.25s; position: relative; overflow: hidden;
+}
+.skill-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--accent-color, var(--red)); transform: scaleX(0);
+  transition: transform 0.3s; transform-origin: left;
+}
+.skill-card:hover::before { transform: scaleX(1); }
+.skill-card:hover { background: var(--surface2); transform: translateY(-3px); }
+.skill-icon { font-size: 1.4rem; }
+.skill-card-name { font-family: var(--condensed); font-size: 0.82rem; letter-spacing: 0.08em; font-weight: 600; }
+.skill-card-cat { font-family: var(--condensed); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); }
+
+/* ── CERTIFICATIONS (Poster style) ── */
+.cert-row { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; scrollbar-width: none; }
+.cert-row::-webkit-scrollbar { display: none; }
+.cert-card {
+  flex: 0 0 220px; background: var(--surface); border: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden; cursor: none; transition: all 0.3s; position: relative;
+}
+.cert-card:hover { transform: scale(1.06); box-shadow: 0 15px 50px rgba(0,0,0,0.7), 0 0 0 2px var(--gold); }
+.cert-poster {
+  height: 130px; display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; position: relative; overflow: hidden;
+}
+.cert-poster-bg { position: absolute; inset: 0; opacity: 0.15; }
+.cert-body { padding: 0.9rem 1rem; }
+.cert-name { font-family: var(--condensed); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 0.3rem; line-height: 1.3; }
+.cert-issuer { font-family: var(--condensed); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+
+/* ── CONTACT / MODAL ── */
+.contact-section { padding: 4rem; background: var(--surface); border-top: 1px solid rgba(255,255,255,0.06); }
+.contact-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+.contact-title { font-family: var(--bebas); font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 0.5rem; }
+.contact-sub { font-size: 0.9rem; color: var(--text2); letter-spacing: 0.05em; margin-bottom: 2.5rem; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; }
+.contact-item {
+  background: var(--surface2); border: 1px solid rgba(255,255,255,0.06);
+  padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+  cursor: none; transition: all 0.2s; text-decoration: none; color: var(--text);
+}
+.contact-item:hover { background: var(--surface3); border-color: rgba(229,9,20,0.4); }
+.contact-item-icon { font-size: 1.5rem; flex-shrink: 0; }
+.contact-item-label { font-family: var(--condensed); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); }
+.contact-item-value { font-size: 0.88rem; margin-top: 0.2rem; }
+
+/* ── MODAL (Experience detail) ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(6px);
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface); width: 90%; max-width: 700px; max-height: 85vh;
+  overflow-y: auto; border: 1px solid rgba(255,255,255,0.1);
+  transform: scale(0.9) translateY(20px); transition: transform 0.3s;
+  scrollbar-width: thin; scrollbar-color: var(--red) transparent;
+}
+.modal-overlay.open .modal { transform: scale(1) translateY(0); }
+.modal-header {
+  position: sticky; top: 0; padding: 1.5rem 2rem 1rem;
+  background: var(--surface); border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; justify-content: space-between; align-items: flex-start; z-index: 1;
+}
+.modal-title { font-family: var(--bebas); font-size: 2rem; letter-spacing: 0.03em; }
+.modal-close {
+  background: rgba(255,255,255,0.1); border: none; color: var(--text);
+  width: 32px; height: 32px; cursor: none; font-size: 1.1rem; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background 0.2s;
+}
+.modal-close:hover { background: var(--red); }
+.modal-body { padding: 1.5rem 2rem 2rem; }
+.modal-role { font-family: var(--condensed); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); margin-bottom: 1.5rem; }
+.modal-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+.modal-bullets li {
+  display: flex; gap: 0.8rem; font-size: 0.88rem; color: var(--text2); line-height: 1.6;
+}
+.modal-bullets li::before { content: '▸'; color: var(--red); flex-shrink: 0; margin-top: 1px; }
+
+/* ── TICKER ── */
+.ticker-wrap { overflow: hidden; background: var(--red); padding: 0.5rem 0; }
+.ticker { display: flex; width: max-content; animation: ticker 25s linear infinite; }
+.ticker-item {
+  font-family: var(--condensed); font-size: 0.78rem; letter-spacing: 0.15em;
+  text-transform: uppercase; white-space: nowrap; padding: 0 2rem; color: #fff;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.ticker-item::after { content: '◆'; color: rgba(255,255,255,0.4); margin-left: 2rem; }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── SPOTLIGHT EFFECT ── */
+.spotlight {
+  position: fixed; width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(229,9,20,0.06) 0%, transparent 70%);
+  pointer-events: none; z-index: 1; transform: translate(-50%,-50%);
+  transition: opacity 0.3s;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 2rem 4rem; border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+.footer-brand { font-family: var(--bebas); font-size: 1.4rem; color: var(--red); letter-spacing: 0.1em; }
+.footer-copy { font-family: var(--condensed); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+
+@media(max-width:768px){
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  section { padding: 3rem 1.5rem; }
+  .hero { padding: 0 1.5rem 6rem; }
+  .featured-card { grid-template-columns: 1fr; }
+  .featured-right { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); }
+  .contact-grid { grid-template-columns: 1fr; }
+  footer { padding: 1.5rem; }
+  .featured-section { padding: 0 1.5rem 3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="spotlight" id="spotlight"></div>
+
+<!-- Navbar -->
+<nav id="navbar">
+  <div class="nav-logo">ADNAN</div>
+  <div class="nav-links">
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire Me</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><div class="badge-dot"></div> Available for Opportunities</div>
+    <h1 class="hero-name">Mohammed<span>Adnan</span></h1>
+    <p class="hero-role">Cybersecurity · Risk Operations · Project Management</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">4+</div><div class="stat-label">Years Exp</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">Industries</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Roles</div></div>
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Drive</div></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#experience" class="btn-primary">▶ View Experience</a>
+      <a href="#contact" class="btn-secondary">ⓘ Contact Info</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item">Transaction Risk Investigator @ Amazon</div>
+    <div class="ticker-item">OWASP Top 10</div>
+    <div class="ticker-item">Web Application Penetration Testing</div>
+    <div class="ticker-item">Project Management</div>
+    <div class="ticker-item">UI/UX Design · Figma</div>
+    <div class="ticker-item">Burp Suite · Kali Linux</div>
+    <div class="ticker-item">Business Development</div>
+    <div class="ticker-item">Risk Analysis</div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item">Transaction Risk Investigator @ Amazon</div>
+    <div class="ticker-item">OWASP Top 10</div>
+    <div class="ticker-item">Web Application Penetration Testing</div>
+    <div class="ticker-item">Project Management</div>
+    <div class="ticker-item">UI/UX Design · Figma</div>
+    <div class="ticker-item">Burp Suite · Kali Linux</div>
+    <div class="ticker-item">Business Development</div>
+    <div class="ticker-item">Risk Analysis</div>
+  </div>
+</div>
+
+<!-- FEATURED (Amazon highlight) -->
+<div class="featured-section" style="padding-top:4rem;">
+  <div class="section-header reveal">
+    <span class="section-title">Featured Role</span>
+    <span class="section-tag">Current</span>
+  </div>
+  <div class="featured-card reveal" onclick="openModal('amazon')">
+    <div class="featured-left">
+      <div>
+        <div class="featured-label">🔴 Now Streaming · Amazon</div>
+        <div class="featured-title">Transaction Risk<br>Investigator</div>
+        <div class="featured-desc">Investigating high-risk transactions, detecting fraud patterns, and making data-driven decisions to protect Amazon's payment ecosystem. Operating at enterprise scale with strict SLA, quality, and compliance metrics.</div>
+        <div class="featured-meta">
+          <div class="meta-chip"><div class="meta-chip-dot" style="background:var(--green)"></div>Jul 2024 – Present</div>
+          <div class="meta-chip"><div class="meta-chip-dot" style="background:var(--cyan)"></div>Hyderabad, India</div>
+          <div class="meta-chip"><div class="meta-chip-dot" style="background:var(--gold)"></div>Fraud Detection</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--condensed);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:0.5rem;">Click to expand role details</div>
+      </div>
+    </div>
+    <div class="featured-right">
+      <div style="font-family:var(--condensed);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem;align-self:flex-start;">Core Competencies</div>
+      <div class="skill-meter"><div class="skill-label"><span class="skill-name">Fraud Detection</span><span class="skill-pct">95%</span></div><div class="skill-bar"><div class="skill-fill" style="background:var(--red)" data-width="95"></div></div></div>
+      <div class="skill-meter"><div class="skill-label"><span class="skill-name">Risk Analysis</span><span class="skill-pct">92%</span></div><div class="skill-bar"><div class="skill-fill" style="background:var(--gold)" data-width="92"></div></div></div>
+      <div class="skill-meter"><div class="skill-label"><span class="skill-name">Data Decision Making</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="skill-fill" style="background:var(--cyan)" data-width="90"></div></div></div>
+      <div class="skill-meter"><div class="skill-label"><span class="skill-name">SLA & Compliance</span><span class="skill-pct">97%</span></div><div class="skill-bar"><div class="skill-fill" style="background:var(--green)" data-width="97"></div></div></div>
+      <div class="skill-meter"><div class="skill-label"><span class="skill-name">Policy Adherence</span><span class="skill-pct">99%</span></div><div class="skill-bar"><div class="skill-fill" style="background:#a78bfa" data-width="99"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERIENCE ROW -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-title">Experience Timeline</span>
+    <span class="section-tag">4+ Years</span>
+    <a href="#" class="see-all">Scroll to explore →</a>
+  </div>
+  <div class="row-scroll reveal">
+
+    <!-- Trekshield BDA -->
+    <div class="exp-card" onclick="openModal('trekshield')">
+      <div class="exp-card-top">
+        <div class="exp-card-bg" style="background:linear-gradient(135deg,#0a2a1a 0%,#1a4a2a 100%)"></div>
+        <div class="exp-company-tag">Trekshield</div>
+        <div class="exp-logo" style="color:#46d369">TREK<br>SHIELD</div>
+      </div>
+      <div class="exp-card-body">
+        <div class="exp-title">Business Development Associate</div>
+        <div class="exp-duration">✦ Jul 2023 – Jul 2024</div>
+        <div class="exp-desc">Driving cybersecurity service sales, client acquisition, and VAPT pitching. Bridging technical teams with business goals.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">VAPT</span><span class="exp-tag">OWASP</span><span class="exp-tag">Client Mgmt</span><span class="exp-tag">Pre-sales</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SMS Al Arab -->
+    <div class="exp-card" onclick="openModal('sms')">
+      <div class="exp-card-top">
+        <div class="exp-card-bg" style="background:linear-gradient(135deg,#1a1a2a 0%,#2a2a4a 100%)"></div>
+        <div class="exp-company-tag">SMS Al Arab</div>
+        <div class="exp-logo" style="color:#818cf8">SMS<br>AL ARAB</div>
+      </div>
+      <div class="exp-card-body">
+        <div class="exp-title">Project Manager</div>
+        <div class="exp-duration">✦ Jul 2022 – Jul 2023</div>
+        <div class="exp-desc">Led end-to-end development of an internal accounting app. Wore multiple hats: PM, UI/UX designer, and manual QA tester.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Figma</span><span class="exp-tag">Agile</span><span class="exp-tag">QA</span><span class="exp-tag">UI/UX</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cybersecurity Intern -->
+    <div class="exp-card" onclick="openModal('intern')">
+      <div class="exp-card-top">
+        <div class="exp-card-bg" style="background:linear-gradient(135deg,#2a1a0a 0%,#4a2a0a 100%)"></div>
+        <div class="exp-company-tag">Trekshield</div>
+        <div class="exp-logo" style="color:#fb923c">CYBER<br>INTERN</div>
+      </div>
+      <div class="exp-card-body">
+        <div class="exp-title">Cybersecurity Intern</div>
+        <div class="exp-duration">✦ Live Project</div>
+        <div class="exp-desc">Penetration testing on live projects. Identified XSS, SQLi, and auth flaws. Drafted vulnerability assessment reports.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Burp Suite</span><span class="exp-tag">Kali Linux</span><span class="exp-tag">XSS</span><span class="exp-tag">SQLi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transcriptionist -->
+    <div class="exp-card" onclick="openModal('transcribe')">
+      <div class="exp-card-top">
+        <div class="exp-card-bg" style="background:linear-gradient(135deg,#1a0a2a 0%,#2a1a4a 100%)"></div>
+        <div class="exp-company-tag">Freelance</div>
+        <div class="exp-logo" style="color:#c084fc">FREE<br>LANCE</div>
+      </div>
+      <div class="exp-card-body">
+        <div class="exp-title">Freelance Transcriptionist</div>
+        <div class="exp-duration">✦ 4+ Years</div>
+        <div class="exp-desc">High-accuracy transcription across diverse content. Strict confidentiality, deadlines, and quality assurance discipline.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Accuracy</span><span class="exp-tag">Data Sensitivity</span><span class="exp-tag">QA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Awareness Facilitator -->
+    <div class="exp-card" onclick="openModal('awareness')">
+      <div class="exp-card-top">
+        <div class="exp-card-bg" style="background:linear-gradient(135deg,#0a1a2a 0%,#0a2a3a 100%)"></div>
+        <div class="exp-company-tag">Community</div>
+        <div class="exp-logo" style="color:#00d4ff">CYBER<br>AWARE</div>
+      </div>
+      <div class="exp-card-body">
+        <div class="exp-title">Cybersecurity Awareness Facilitator</div>
+        <div class="exp-duration">✦ Community Programs</div>
+        <div class="exp-desc">Conducted workshops at IIT Hyderabad & universities. Educating on phishing, social engineering, and cyber hygiene.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">IIT Hyderabad</span><span class="exp-tag">Workshops</span><span class="exp-tag">Training</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-title">Skills Arsenal</span>
+    <span class="section-tag">Technical & Soft</span>
+  </div>
+  <div class="skills-grid reveal">
+    <div class="skill-card" style="--accent-color:#e50914"><div class="skill-icon">🔐</div><div class="skill-card-name">OWASP Top 10</div><div class="skill-card-cat">Security</div></div>
+    <div class="skill-card" style="--accent-color:#fb923c"><div class="skill-icon">🎯</div><div class="skill-card-name">Burp Suite</div><div class="skill-card-cat">Pen Testing</div></div>
+    <div class="skill-card" style="--accent-color:#46d369"><div class="skill-icon">🐧</div><div class="skill-card-name">Kali Linux</div><div class="skill-card-cat">OS</div></div>
+    <div class="skill-card" style="--accent-color:#00d4ff"><div class="skill-icon">🎨</div><div class="skill-card-name">Figma</div><div class="skill-card-cat">UI/UX Design</div></div>
+    <div class="skill-card" style="--accent-color:#f5c518"><div class="skill-icon">📊</div><div class="skill-card-name">Risk Assessment</div><div class="skill-card-cat">Analysis</div></div>
+    <div class="skill-card" style="--accent-color:#a78bfa"><div class="skill-icon">🧪</div><div class="skill-card-name">Manual Testing</div><div class="skill-card-cat">QA</div></div>
+    <div class="skill-card" style="--accent-color:#e50914"><div class="skill-icon">🕷️</div><div class="skill-card-name">PortSwigger Labs</div><div class="skill-card-cat">Security</div></div>
+    <div class="skill-card" style="--accent-color:#46d369"><div class="skill-icon">📈</div><div class="skill-card-name">Data Analysis</div><div class="skill-card-cat">Analytics</div></div>
+    <div class="skill-card" style="--accent-color:#00d4ff"><div class="skill-icon">🗂️</div><div class="skill-card-name">Project Mgmt</div><div class="skill-card-cat">Agile / Scrum</div></div>
+    <div class="skill-card" style="--accent-color:#fb923c"><div class="skill-icon">🛡️</div><div class="skill-card-name">Vulnerability Assessment</div><div class="skill-card-cat">VAPT</div></div>
+    <div class="skill-card" style="--accent-color:#f5c518"><div class="skill-icon">💼</div><div class="skill-card-name">Business Development</div><div class="skill-card-cat">Sales</div></div>
+    <div class="skill-card" style="--accent-color:#a78bfa"><div class="skill-icon">📋</div><div class="skill-card-name">Google Workspace</div><div class="skill-card-cat">Productivity</div></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-title">Key Projects</span>
+    <span class="section-tag">Portfolio</span>
+  </div>
+  <div class="row-scroll reveal">
+
+    <div class="exp-card" style="flex:0 0 360px" onclick="openModal('proj1')">
+      <div class="exp-card-top">
+        <div class="exp-card-bg" style="background:linear-gradient(135deg,#1a1030 0%,#2d1f5e 100%)"></div>
+        <div class="exp-company-tag">SMS Al Arab</div>
+        <div class="exp-logo" style="color:#818cf8;font-size:1.6rem">QUICKBOOKS<br>REPLICA</div>
+      </div>
+      <div class="exp-card-body">
+        <div class="exp-title">Internal Accounting App</div>
+        <div class="exp-duration">✦ QuickBooks-Inspired MSME Solution</div>
+        <div class="exp-desc">Designed UI/UX in Figma and performed manual QA testing to validate invoicing, expense, and reporting workflows.</div>
+        <div class="exp-tags"><span class="exp-tag">Figma</span><span class="exp-tag">UI/UX</span><span class="exp-tag">Manual QA</span><span class="exp-tag">MSME</span></div>
+      </div>
+    </div>
+
+    <div class="exp-card" style="flex:0 0 360px" onclick="openModal('proj2')">
+      <div class="exp-card-top">
+        <div class="exp-card-bg" style="background:linear-gradient(135deg,#0f1f10 0%,#1f3a1f 100%)"></div>
+        <div class="exp-company-tag">Trekshield</div>
+        <div class="exp-logo" style="color:#46d369;font-size:1.6rem">WEB APP<br>PENTEST</div>
+      </div>
+      <div class="exp-card-body">
+        <div class="exp-title">Web App Penetration Testing</div>
+        <div class="exp-duration">✦ Live Project · OWASP Top 10</div>
+        <div class="exp-desc">Executed full penetration tests using Burp Suite and Kali Linux on live projects, documenting and remediating critical vulnerabilities.</div>
+        <div class="exp-tags"><span class="exp-tag">Burp Suite</span><span class="exp-tag">Kali Linux</span><span class="exp-tag">XSS</span><span class="exp-tag">SQLi</span></div>
+      </div>
+    </div>
+
+    <div class="exp-card" style="flex:0 0 360px" onclick="openModal('proj3')">
+      <div class="exp-card-top">
+        <div class="exp-card-bg" style="background:linear-gradient(135deg,#0a1a2a 0%,#0f2a3f 100%)"></div>
+        <div class="exp-company-tag">IIT Hyderabad</div>
+        <div class="exp-logo" style="color:#00d4ff;font-size:1.6rem">CYBER<br>OUTREACH</div>
+      </div>
+      <div class="exp-card-body">
+        <div class="exp-title">Cybersecurity Awareness Program</div>
+        <div class="exp-duration">✦ IIT Hyderabad & Universities</div>
+        <div class="exp-desc">Workshops on phishing, social engineering, and cyber hygiene with live attack demonstrations. Reached hundreds of participants.</div>
+        <div class="exp-tags"><span class="exp-tag">Public Speaking</span><span class="exp-tag">Training</span><span class="exp-tag">Workshops</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-header reveal">
+    <span class="section-title">Certifications</span>
+    <span class="section-tag">Verified</span>
+  </div>
+  <div class="cert-row reveal">
+    <div class="cert-card">
+      <div class="cert-poster"><div class="cert-poster-bg" style="background:linear-gradient(135deg,#1a1a2a,#3a3a6a)"></div>🎓</div>
+      <div class="cert-body"><div class="cert-name">Google Cybersecurity Certificate</div><div class="cert-issuer">Google via Coursera</div></div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-poster"><div class="cert-poster-bg" style="background:linear-gradient(135deg,#2a1010,#6a2020)"></div>🔓</div>
+      <div class="cert-body"><div class="cert-name">PortSwigger Web Security Academy</div><div class="cert-issuer">PortSwigger Labs</div></div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-poster"><div class="cert-poster-bg" style="background:linear-gradient(135deg,#0a2a1a,#1a5a3a)"></div>🌐</div>
+      <div class="cert-body"><div class="cert-name">TryHackMe Labs</div><div class="cert-issuer">TryHackMe</div></div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-poster"><div class="cert-poster-bg" style="background:linear-gradient(135deg,#1a1a0a,#3a3a0a)"></div>🛡️</div>
+      <div class="cert-body"><div class="cert-name">Cybersecurity Workshop</div><div class="cert-issuer">IIT Hyderabad</div></div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-poster"><div class="cert-poster-bg" style="background:linear-gradient(135deg,#1a0a2a,#3a1a5a)"></div>📊</div>
+      <div class="cert-body"><div class="cert-name">Operations Management</div><div class="cert-issuer">Professional Training</div></div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-poster"><div class="cert-poster-bg" style="background:linear-gradient(135deg,#0a1a2a,#1a3a5a)"></div>⚡</div>
+      <div class="cert-body"><div class="cert-name">Risk & Quality Management</div><div class="cert-issuer">Professional Training</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="contact-inner reveal">
+    <div class="contact-title">Let's Work<br><span style="color:var(--red)">Together</span></div>
+    <p class="contact-sub">Open to cybersecurity, risk, and tech roles. Let's connect.</p>
+    <div class="contact-grid">
+      <a class="contact-item" href="tel:+917993350294">
+        <div class="contact-item-icon">📱</div>
+        <div><div class="contact-item-label">Mobile</div><div class="contact-item-value">+91 7993350294</div></div>
+      </a>
+      <a class="contact-item" href="mailto:mohdadnann1@gmail.com">
+        <div class="contact-item-icon">✉️</div>
+        <div><div class="contact-item-label">Email</div><div class="contact-item-value">mohdadnann1@gmail.com</div></div>
+      </a>
+      <a class="contact-item" href="#">
+        <div class="contact-item-icon">📍</div>
+        <div><div class="contact-item-label">Location</div><div class="contact-item-value">Hyderabad, India</div></div>
+      </a>
+      <a class="contact-item" href="#">
+        <div class="contact-item-icon">🎓</div>
+        <div><div class="contact-item-label">Education</div><div class="contact-item-value">B.E. Information Technology · Osmania University, 2022</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">ADNAN©</div>
+  <div class="footer-copy">IT Engineer · Cybersecurity · Risk Operations · Hyderabad 2025</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">—</div>
+        <div class="modal-role" id="modalRole">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <ul class="modal-bullets" id="modalBullets"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Cursor ────────────────────────────────────────────────
+var cursor = document.getElementById('cursor');
+var dot = document.getElementById('cursorDot');
+var spotlight = document.getElementById('spotlight');
+var mx = 0, my = 0, cx = 0, cy = 0;
+
+document.addEventListener('mousemove', function(e) {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  spotlight.style.left = mx + 'px'; spotlight.style.top = my + 'px';
+});
+
+function animCursor() {
+  cx += (mx - cx) * 0.12; cy += (my - cy) * 0.12;
+  cursor.style.left = cx + 'px'; cursor.style.top = cy + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+document.querySelectorAll('button, a, .exp-card, .cert-card, .skill-card, .contact-item, .featured-card').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { cursor.classList.add('hovered'); });
+  el.addEventListener('mouseleave', function() { cursor.classList.remove('hovered'); });
+});
+
+// ── Navbar scroll ─────────────────────────────────────────
+window.addEventListener('scroll', function() {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── Scroll reveal ─────────────────────────────────────────
+var reveals = document.querySelectorAll('.reveal');
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Animate skill bars
+      entry.target.querySelectorAll('.skill-fill[data-width]').forEach(function(bar) {
+        setTimeout(function() { bar.style.width = bar.dataset.width + '%'; }, 300);
+      });
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(function(el) { observer.observe(el); });
+
+// Also observe featured section separately
+document.querySelectorAll('.skill-fill[data-width]').forEach(function(bar) {
+  var obs = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) { bar.style.width = bar.dataset.width + '%'; obs.disconnect(); }
+  }, { threshold: 0.3 });
+  obs.observe(bar);
+});
+
+// ── Modal data ────────────────────────────────────────────
+var modals = {
+  amazon: {
+    title: 'Transaction Risk Investigator',
+    role: '🔴 Amazon · Hyderabad India · July 2024 – Present',
+    bullets: [
+      'Investigate high-risk transactions to identify fraud, abuse, and policy violations, ensuring secure payment processing and customer trust.',
+      'Analyze transaction patterns, account behavior, and risk signals to detect fraudulent activities and reduce financial losses.',
+      'Make data-driven decisions by reviewing internal tools, case notes, and supporting documentation in compliance with Amazon risk policies.',
+      'Collaborate with cross-functional teams to escalate complex cases and contribute to process improvements in risk mitigation workflows.',
+      'Maintain high accuracy and productivity while meeting strict SLA, quality, and compliance metrics in a fast-paced operations environment.'
+    ]
+  },
+  trekshield: {
+    title: 'Business Development Associate',
+    role: '🟢 Trekshield · July 2023 – July 2024',
+    bullets: [
+      'Collaborated with cybersecurity engineers and analysts to evaluate threats, develop mitigation strategies, and strengthen clients\' data protection frameworks.',
+      'Drove client acquisition initiatives by identifying potential leads and pitching cybersecurity services including VAPT, web application security, and OWASP Top 10 risk mitigation.',
+      'Conducted market research to analyze industry trends, competitor offerings, and emerging cybersecurity threats to support sales strategy.',
+      'Assisted in pre-sales activities such as proposal creation, client presentations, and follow-ups, contributing to improved conversion rates.',
+      'Oversaw multiple project phases — including design, implementation, testing, and risk mitigation — to deliver secure and high-performance solutions within defined timelines.'
+    ]
+  },
+  sms: {
+    title: 'Project Manager',
+    role: '🔵 SMS AL Arab · July 2022 – July 2023',
+    bullets: [
+      'Led the end-to-end development of an internal accounting application modeled on QuickBooks, coordinating requirements, timelines, and deliverables across teams.',
+      'Played a key role as a UI/UX designer, creating wireframes, user flows, and high-fidelity designs for the MSME application using Figma.',
+      'Acted as a functional and manual tester, validating application workflows, identifying bugs, and ensuring alignment with business requirements before release.',
+      'Collaborated closely with developers and stakeholders to translate accounting and MSME business needs into practical, user-friendly application features.',
+      'Managed sprint planning, progress tracking, and client communication, ensuring on-time delivery and quality execution of internal software projects.'
+    ]
+  },
+  intern: {
+    title: 'Cybersecurity Intern (Live Project)',
+    role: '🟠 Trekshield · Internship',
+    bullets: [
+      'Performed web application penetration testing on live projects under the guidance of senior security professionals.',
+      'Identified and documented vulnerabilities aligned with OWASP Top 10, including XSS, SQL Injection, authentication flaws, and access control issues.',
+      'Assisted in drafting detailed vulnerability assessment reports with clear impact analysis and remediation recommendations.',
+      'Gained hands-on exposure to real-world security testing workflows, tools (Burp Suite, Kali Linux), and industry reporting standards.'
+    ]
+  },
+  transcribe: {
+    title: 'Freelance Transcriptionist',
+    role: '🟣 Freelance · 4+ Years',
+    bullets: [
+      'Delivered high-accuracy transcriptions across diverse content types while adhering to strict confidentiality and turnaround timelines.',
+      'Demonstrated strong attention to detail, data sensitivity awareness, and quality assurance discipline.',
+      'Built consistency in meeting deadlines and maintaining accuracy under high-volume workloads.',
+      'Applied professional data handling practices in compliance with client confidentiality requirements.'
+    ]
+  },
+  awareness: {
+    title: 'Cybersecurity Awareness Facilitator',
+    role: '🔵 Community Programs · IIT Hyderabad & Universities',
+    bullets: [
+      'Conducted cybersecurity awareness sessions across schools, universities, and professional communities, including workshops at IIT Hyderabad.',
+      'Delivered both on-site and online workshops, educating participants on phishing attacks, password security, social engineering, online fraud, and cyber hygiene best practices.',
+      'Simplified complex cybersecurity concepts for non-technical audiences, improving awareness and adoption of safe digital behaviors.',
+      'Designed interactive presentations, real-world attack examples, and live demonstrations to enhance participant engagement and retention.'
+    ]
+  },
+  proj1: {
+    title: 'Internal Accounting Application',
+    role: '🔵 QuickBooks Replica · SMS Al Arab · MSME Finance System',
+    bullets: [
+      'Designed complete UI/UX system in Figma including wireframes, user flows, and high-fidelity prototypes.',
+      'Performed manual and functional QA testing to validate invoicing, expense tracking, and reporting workflows.',
+      'Coordinated requirements gathering between accounting stakeholders and development team.',
+      'Translated complex financial workflows into intuitive, user-friendly application interfaces.',
+      'Managed sprint planning and delivery timeline for the full product development cycle.'
+    ]
+  },
+  proj2: {
+    title: 'Web App Penetration Testing',
+    role: '🟢 Live Projects · Trekshield · OWASP Top 10 Framework',
+    bullets: [
+      'Executed comprehensive web application penetration tests on live production systems using industry-standard tools.',
+      'Identified critical vulnerabilities including Cross-Site Scripting (XSS), SQL Injection, authentication flaws, and access control bypass.',
+      'Used Burp Suite for request interception, manipulation, and automated scanning of endpoints.',
+      'Operated Kali Linux environment with full suite of penetration testing utilities.',
+      'Drafted detailed vulnerability assessment reports with CVSS scoring, impact analysis, and remediation recommendations for client delivery.'
+    ]
+  },
+  proj3: {
+    title: 'Cybersecurity Awareness Program',
+    role: '🔵 IIT Hyderabad · Universities · Community Programs',
+    bullets: [
+      'Designed and delivered cybersecurity awareness workshops at IIT Hyderabad and multiple universities across Hyderabad.',
+      'Covered topics including phishing attacks, password security, social engineering tactics, online fraud, and cyber hygiene.',
+      'Created interactive presentations with real-world attack examples and live demonstrations to maximize engagement.',
+      'Simplified highly technical security concepts for non-technical audiences including students and faculty.',
+      'Delivered sessions both on-site and online, reaching a broad range of participants across educational institutions and professional communities.'
+    ]
+  }
+};
+
+function openModal(key) {
+  var data = modals[key];
+  if (!data) return;
+  document.getElementById('modalTitle').textContent = data.title;
+  document.getElementById('modalRole').textContent = data.role;
+  var bullets = document.getElementById('modalBullets');
+  bullets.innerHTML = '';
+  data.bullets.forEach(function(b) {
+    var li = document.createElement('li');
+    li.textContent = b;
+    bullets.appendChild(li);
+  });
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
